@@ -21,6 +21,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<ApiResponse> imageNotFoundExceptionHandler(ImageNotFoundException imageNotFoundException) {
+        String message = imageNotFoundException.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message, false);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
 
