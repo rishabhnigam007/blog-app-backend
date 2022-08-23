@@ -1,8 +1,11 @@
 package com.blog.services.impl;
 
+import com.blog.config.AppConstants;
+import com.blog.entities.Role;
 import com.blog.entities.User;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payloads.UserDto;
+import com.blog.repositories.RoleRepo;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -24,6 +27,26 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+
+        User user = this.modelMapper.map(userDto, User.class);
+        // Encoded the password
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        // roles
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+
+        user.getRoles().add(role);
+
+        User newUser = this.userRepo.save(user);
+
+        UserDto newUserDto = this.modelMapper.map(newUser, UserDto.class);
+        return newUserDto;
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

@@ -35,6 +35,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InvalidUsernameOrPassword.class)
+    public ResponseEntity<ApiResponse> invalidUsernameOrPasswordHandler(InvalidUsernameOrPassword invalidUsernameOrPassword) {
+        String message = invalidUsernameOrPassword.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message, false);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
 
