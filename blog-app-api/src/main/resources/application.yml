@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 5000
 
 spring:
   datasource:
@@ -11,10 +11,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
+    #        format_sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
+      show-sql: true
+  profiles:
+  #    active: prod
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,4 +30,3 @@ logging:
     org:
       springframework:
         security: DEBUG
-
