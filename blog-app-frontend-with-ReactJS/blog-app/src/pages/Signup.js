@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, CardBody, CardHeader, Col, Container, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from "reactstrap";
 import Base from "../components/Base";
 import { signup } from "../services/user-service";
 import { toast } from "react-toastify";
@@ -45,15 +45,20 @@ const Signup = () => {
     //submitting the form
     const submitForm = (event) => {
         event.preventDefault()
-        console.log(data)
 
+        // if (error.isError) {
+        //     toast.error("Form data is invalid, correct all detail then submit")
+        //     return
+        // }
+
+        console.log(data)
         //data validate
 
         //call server api for sending data
         signup(data).then((resp) => {
             console.log(resp)
             console.log("success log")
-            toast.success("User is register successfully")
+            toast.success("User is register successfully !! User ID : " + resp.id)
             setData({
                 name: '',
                 email: '',
@@ -63,6 +68,11 @@ const Signup = () => {
         }).catch((error) => {
             console.log(error)
             console.log("Error log")
+            // handle errors in proper way
+            setError({
+                errors: error,
+                isError: true
+            })
         })
     }
 
@@ -89,8 +99,14 @@ const Signup = () => {
                                             placeholder="Enter your Name"
                                             onChange={(e) => handleChange(e, 'name')}
                                             value={data.name}
-                                            required
+                                            invalid={error.errors?.response?.data?.name ? true : false}
+
                                         />
+
+                                        <FormFeedback>
+                                            {error.errors?.response?.data?.name}
+                                        </FormFeedback>
+
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="email">Enter Email</Label>
@@ -101,8 +117,14 @@ const Signup = () => {
                                             placeholder="Enter your Email"
                                             onChange={(e) => handleChange(e, 'email')}
                                             value={data.email}
-                                            required
+                                            invalid={error.errors?.response?.data?.email ? true : false}
+
                                         />
+
+                                        <FormFeedback>
+                                            {error.errors?.response?.data?.email}
+                                        </FormFeedback>
+
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="password">Password</Label>
@@ -113,8 +135,14 @@ const Signup = () => {
                                             placeholder="Enter your Password"
                                             onChange={(e) => handleChange(e, 'password')}
                                             value={data.password}
-                                            required
+                                            invalid={error.errors?.response?.data?.password ? true : false}
+
                                         />
+
+                                        <FormFeedback>
+                                            {error.errors?.response?.data?.password}
+                                        </FormFeedback>
+
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="about">About</Label>
@@ -126,8 +154,14 @@ const Signup = () => {
                                             onChange={(e) => handleChange(e, 'about')}
                                             style={{ height: "250px" }}
                                             value={data.about}
-                                            required
+                                            invalid={error.errors?.response?.data?.about ? true : false}
+
                                         />
+
+                                        <FormFeedback>
+                                            {error.errors?.response?.data?.about}
+                                        </FormFeedback>
+
                                     </FormGroup>
                                     <Container className="text-center">
                                         <Button type="submit" color="warning">

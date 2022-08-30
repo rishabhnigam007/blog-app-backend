@@ -18,13 +18,14 @@ public class UserDto {
     @Size(min = 3, message = "Username must be minimum of 3 characters")
     private String name;
     @Email(message = "Email address is not valid")
+    @NotEmpty(message = "Email should not be null")
     private String email;
     @NotEmpty(message = "Password should not be null")
     @Size(min = 3, message = "Password must be minimum of 3 characters")
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    
+
     @NotEmpty(message = "About should not be null")
     private String about;
     private Set<RoleDto> roles = new HashSet<>();
