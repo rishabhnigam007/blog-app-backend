@@ -1,11 +1,13 @@
 package com.blog.controllers;
 
+import com.blog.entities.User;
 import com.blog.exceptions.InvalidUsernameOrPassword;
 import com.blog.payloads.JwtAuthRequest;
 import com.blog.payloads.JwtAuthResponse;
 import com.blog.payloads.UserDto;
 import com.blog.security.JwtTokenHelper;
 import com.blog.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) throws Exception {
 
@@ -47,6 +52,7 @@ public class AuthController {
         String token = this.jwtTokenHelper.generateToken(userDetails);
 
         JwtAuthResponse response = new JwtAuthResponse();
+        response.setUser(this.mapper.map((User) userDetails, UserDto.class));
         response.setToken(token);
 
         return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
